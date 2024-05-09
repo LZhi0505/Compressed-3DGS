@@ -249,7 +249,8 @@ def compress_gaussians(
     with torch.no_grad():
         if prune_threshold >= 0:
             non_prune_mask = color_importance > prune_threshold
-            print(f"prune: {(1-non_prune_mask.float().mean())*100:.2f}%")
+            print(f"prune: {(1 - non_prune_mask.float().mean()) * 100:.2f}%")
+
             gaussians.mask_splats(non_prune_mask)
             gaussian_importance = gaussian_importance[non_prune_mask]
             color_importance = color_importance[non_prune_mask]

@@ -1,0 +1,26 @@
+Run: 对3DGS模型进行压缩
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/科技馆 --data_device "cuda" --output_vq ./output/kejiguan --resolution 1 --eval
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/凌公塘 --data_device "cpu" --output_vq ./output/linggongtang --resolution 1 --eval
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/寺平古宅 --data_device "cpu" --output_vq ./output/sipingguzhai --resolution 1 --eval
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/万佛塔 --data_device "cuda" --output_vq ./output/wanfota --resolution 1 --eval
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/湘家荡 --data_device "cuda" --output_vq ./output/xiangjiadang --resolution 1 --eval
+python compress.py --model_path /media/liuzhi/b4608ade-d2e0-430d-a40b-f29a8b22cb8c/Dataset/3DGS_Dataset/植物 --data_device "cuda" --output_vq ./output/zhiwu --resolution 1 --eval
+
+Render: Generate renderings
+python render.py -m output/kejiguan
+python render.py -m output/linggongtang
+python render.py -m output/sipingguzhai
+python render.py -m output/wanfota
+python render.py -m output/xiangjiadang
+python render.py -m output/zhiwu
+
+Evaluation: Compute error metrics on renderings
+python metrics.py -m output/kejiguan
+python metrics.py -m output/linggongtang
+python metrics.py -m output/sipingguzhai
+python metrics.py -m output/wanfota
+python metrics.py -m output/xiangjiadang
+python metrics.py -m output/zhiwu
+
+npz转ply
+python npz2ply.py output/zhiwu/point_cloud/iteration_35000/point_cloud.npz
