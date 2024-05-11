@@ -50,7 +50,8 @@ class ModelParams(ParamGroup):
         self._white_background = False
         self.data_device = "cuda"
         self.eval = False
-        super().__init__(parser, "Loading Parameters", sentinel)
+
+        super().__init__(parser, "Loading Parameters", sentinel)    # 调用ParamGroup的__init__方法来添加这些属性作为参数
 
     def extract(self, args):
         g = super().extract(args)
@@ -119,23 +120,25 @@ class OptimizationParams(ParamGroup):
         super().__init__(parser, "Optimization Parameters")
 
 
-def get_combined_args(parser: ArgumentParser,cmd=None):
+def get_combined_args(parser: ArgumentParser, cmd=None):
     cmdlne_string = sys.argv[1:] if cmd is None else cmd
     cfgfile_string = "Namespace()"
-    args_cmdline = parser.parse_args(cmdlne_string)
+    args_cmdline = parser.parse_args(cmdlne_string) # 解析命令行参数
 
     try:
         cfgfilepath = os.path.join(args_cmdline.model_path, "cfg_args")
         print("Looking for config file in", cfgfilepath)
         with open(cfgfilepath) as cfg_file:
             print("Config file found: {}".format(cfgfilepath))
-            cfgfile_string = cfg_file.read()
+            cfgfile_string = cfg_file.read()    # 读取结果保存文件夹下cfg_args文件的内容
     except TypeError:
         print("Config file not found at")
         pass
-    args_cfgfile = eval(cfgfile_string)
+    args_cfgfile = eval(cfgfile_string) # 转换为python对象
 
-    merged_dict = vars(args_cfgfile).copy()
+    merged_dict = vars(args_cfgfile).copy() # 将读取的各参数转换为一个字典，复制到 merged_dict
+
+    # 将之前保存的args各参数 更新为 现命令行指定的
     for k, v in vars(args_cmdline).items():
         if v != None:
             merged_dict[k] = v

@@ -205,6 +205,7 @@ def run_vq(
         cfg_log_f.write(str(Namespace(**vars(comp_params))))
 
     iteration = scene.loaded_iter + comp_params.finetune_iterations
+
     if comp_params.finetune_iterations > 0:
 
         start_time = time.time()
@@ -247,13 +248,16 @@ def run_vq(
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Compression script parameters")
+
     model = ModelParams(parser, sentinel=True)
     model.data_device = "cuda"
     pipeline = PipelineParams(parser)
     op = OptimizationParams(parser)
     comp = CompressionParams(parser)
-    args = get_combined_args(parser)
 
+    args = get_combined_args(parser)    # 解析从命令行传递给本脚本的参数，更新已保存模型文件夹下cfg_args中读取的对应参数，全部参数存储在args中
+
+    # 不存在output_vq参数时，新建一个唯一的输出文件夹路径
     if args.output_vq is None:
         args.output_vq = unique_output_folder()
 
